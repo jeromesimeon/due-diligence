@@ -1,0 +1,4 @@
+{
+    "$class": "dueDiligence.MyRequest",
+    "input": "World"
+}
