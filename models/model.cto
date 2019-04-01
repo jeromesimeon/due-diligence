@@ -14,14 +14,28 @@ transaction MyResponse extends Response {
 /**
  * The model for the contract
  */
-asset MyContract extends AccordContract {
+
+
+ /** The Status of the Contract 
+  *
+  */
+
+  enum ContractStatus {
+    o UNISIGNED
+    o SIGNED 
+    o POST_DUE_DILIGENCE
+    o CANCELLED 
+  }
+
+
+asset DueDiligence extends AccordContract {
   /**
    * The name for the contract
    */
-   
   o String buyer
   o String seller
   o Double dueDiligenceFee
+  o DateTime effectiveDate
   o DateTime dueDiligenceDate
   o DateTime buyerSignatureDate
   o DateTime sellerSignatureDate
