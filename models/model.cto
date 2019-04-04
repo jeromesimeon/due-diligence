@@ -2,58 +2,40 @@ namespace org.project.dueDiligence
 
 import org.accordproject.cicero.contract.* from https://models.accordproject.org/cicero/contract.cto
 import org.accordproject.cicero.runtime.* from https://models.accordproject.org/cicero/runtime.cto
-import com.docusign.connect.DocuSignEnvelopeInformation from https://models.accordproject.org/docusign/connect.cto
+import org.accordproject.money.MonetaryAmount from https://models.accordproject.org/money.cto
+import org.accordproject.signature.ContractSigned from https://models.accordproject.org/signature/signature.cto
+import org.accordproject.payment.PaymentReceived from https://models.accordproject.org/payment/payment.cto
 
-
-contract DueDiligence over TemplateModel {
-
+asset DueDiligenceState extends AccordContractState  {
+  o DueDiligenceStatus status
 }
 
 
-transaction SignK extends Request {
-  o String buyerSignature
-  o String sellerSignature
-  o DateTime buyerSignatureDate
+
+asset DueDiligenceClause extends AccordContract {
+  o String buyer
+  o String seller
   o DateTime effectiveDate
-}
-
-transaction PayDueDiligence extends Request {
-  o Double dueDiligenceFee
   o DateTime dueDiligenceDate
 }
-
-transaction MyResponse extends Response {
-  o String output
-}
-
-/**
- * The model for the contract
- */
-
 
  /** The Status of the Contract 
   *
   */
 
-  enum ContractStatus {
+  enum DueDiligenceStatus {
     o UNISIGNED
     o SIGNED 
     o POST_DUE_DILIGENCE
     o CANCELLED 
   }
 
-asset DocuSignEnvelopeClause extends AccordContract {
-  /**
-   * The status of the envelope
-   */
-  o String status
+transaction SignK extends Request {
+  o String buyerSignature
+  o String sellerSignature
+  o DateTime buyerSignatureDate
 }
 
-asset DueDiligence extends AccordContract {
-  /**
-   * Due Diligence clause from NC Real Estate Contract
-   */
-  o String buyer
-  o String seller
-  o DateTime sellerSignatureDate
+transaction MyResponse extends Response {
+  o String output
 }

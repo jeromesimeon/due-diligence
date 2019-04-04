@@ -5,8 +5,20 @@ Feature: Due Diligence clause
   Background:
     Given the default contract in the initial state
 
-  Scenario: The contract should set the "Effective Date" by requesting signature from seller
-    When it receives the docusign response from the seller
+
+  Scenario: The contract should be signed by buyer and have dueDiligencFee and dueDiligenceDate set by buyer
+    When buyer requests signature contract should be signed by buyer, have dueDiligencFee and dueDiligenceDate
+    Then it should request signature from seller
+"""
+{
+    "$class": "dueDiligence.SellerSignature",
+    "output": "effectiveDate"
+}
+"""
+
+
+  Scenario: The contract should set the "Effective Date" by requesting response of signature from seller
+    When it receives the signed response from the seller
     Then it should set the effective date
 """
 {
@@ -15,7 +27,7 @@ Feature: Due Diligence clause
 }
 """
 
-  Scenario: The contract should advance the state to SIGNED when it receives seller's signature
+  Scenario: The contract should advance the state form UNSIGNED to SIGNED when it receives seller's signature
 
     When it receives the docusign response from the seller
     Then it should advance the state of the contract to SIGNED
@@ -25,6 +37,7 @@ Feature: Due Diligence clause
 
 }
 """
+
 
   Scenario: When Buyer notifies contract that it cancels contract should advance state to CANCELLED
 

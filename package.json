@@ -3,9 +3,9 @@
     "version": "0.0.0",
     "description": "Name of the person to greet: \"Dan\".\nThank you!",
     "cicero": {
-      "version": "^0.11.1",
-      "language": "ergo",
-      "template": "contract"
+        "version": "^0.11.1",
+        "language": "ergo",
+        "template": "contract"
     },
     "devDependencies": {
         "cucumber": "^5.1.0",
