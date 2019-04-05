@@ -6,15 +6,15 @@ import org.accordproject.money.MonetaryAmount from https://models.accordproject.
 import org.accordproject.signature.ContractSigned from https://models.accordproject.org/signature/signature.cto
 import org.accordproject.payment.PaymentReceived from https://models.accordproject.org/payment/payment.cto
 
+
 asset DueDiligenceState extends AccordContractState  {
   o DueDiligenceStatus status
 }
 
 
-
-asset DueDiligenceClause extends AccordContract {
-  o String buyer
-  o String seller
+asset DueDiligenceContract extends AccordContract {
+  o AccordParty buyer
+  o AccordParty seller
   o DateTime effectiveDate
   o DateTime dueDiligenceDate
 }
@@ -34,6 +34,10 @@ transaction SignK extends Request {
   o String buyerSignature
   o String sellerSignature
   o DateTime buyerSignatureDate
+}
+
+transaction DDPayment extends Request {
+  o Double dueDiligenceFee
 }
 
 transaction MyResponse extends Response {

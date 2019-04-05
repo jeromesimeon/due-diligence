@@ -5,6 +5,15 @@ Feature: Due Diligence clause
   Background:
     Given the default contract in the initial state
 
+  Scenario: The contract should be signed by buyer before submission to seller
+    When buyer requests signature contract should be signed by buyer
+    Then it should request signature from seller
+"""
+{
+    "$class": "dueDiligence.SellerSignature",
+    "output": "effectiveDate"
+}
+"""
 
   Scenario: The contract should be signed by buyer and have dueDiligencFee and dueDiligenceDate set by buyer
     When buyer requests signature contract should be signed by buyer, have dueDiligencFee and dueDiligenceDate
