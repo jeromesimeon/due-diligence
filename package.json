@@ -1,18 +1,19 @@
 {
     "name": "due-diligence",
-    "version": "0.0.0",
-    "description": "Name of the person to greet: \"Dan\".\nThank you!",
-    "cicero": {
-        "version": "^0.11.1",
-        "language": "ergo",
-        "template": "contract"
+    "version": "0.01.1",
+    "description": "Due diligence clause from NC Offer",
+    "author": "Thomas M. Brooke",
+    "license": "Apache-2.0",
+    "accordproject": {
+        "template": "contract",
+        "ergo": "0.8.0",
+        "cicero": "^0.12.0"
     },
     "devDependencies": {
-        "cucumber": "^5.1.0",
-        "chai": "4.2.0",
-        "@accordproject/cicero-cli": "^0.11.1"
+        "cucumber": "^5.1.0"
     },
     "scripts": {
         "test": "cucumber-js test -r .cucumber.js"
-    }
+    },
+    "keywords": ["offer", "purchase", "real-estate", "nc"]
 }
