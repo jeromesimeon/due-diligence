@@ -11,7 +11,6 @@ asset DueDiligenceState extends AccordContractState  {
   o DueDiligenceStatus status
 }
 
-
 asset DueDiligenceContract extends AccordContract {
   o AccordParty buyer
   o AccordParty seller
@@ -41,9 +40,6 @@ transaction SignK extends Request {
 }
 
 transaction DDPayment extends Request {
-  o Double dueDiligenceFee
+  o PaymentObligation dueDiligenceFee
 }
 
-transaction MyResponse extends Response {
-  o String output
-}
