@@ -62,4 +62,10 @@ Feature: Due Diligence clause
 
     Scenario: When due diligence date arrive Contract should notify Buyer and Seller period is over
 
-      When 
+      When contract requests current date and the current date is > due dilignenc date
+      Then contract should advance state of the contract to POST_DUE_DILIGENCE
+"""
+{
+
+}
+"""

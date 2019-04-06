@@ -19,8 +19,7 @@ import org.accordproject.signature.ContractSigned
 import org.accordproject.payment.PaymentReceived
 
 
-contract DueDiligence over DueDiligenceContract state 
-  DueDiligenceStatus {
+contract DueDiligence over DueDiligenceContract {
 
     // Set the Initial State
 
@@ -36,19 +35,22 @@ contract DueDiligence over DueDiligenceContract state
 
     clause buyerSignature(request: ContractSigned) : Response emits SubmittedOffer {
 
-        emit SubmittedOffer {
+    return Response{
+
+      SubmittedOffer: {
             contract: contract,
             dueDiligenceDate: contract.dueDiligenceDate,
             dueDiligenceFee: contract.dueDiligenceFee,
             buyerSignature: contract.buyerSignature,
             buyerSignatureDate: contract.buyerSignatureDate
-        };
-    return Response{}
+        }
+    }
   }
 
   // Buyer requests seller to sign seller's response sets effectiveDate and moves state
 
       clause sellerSignature(request: ContractSigned) : Response emits AcceptedOffer {
+        
         enforce request.buyerSignature = true
            else throw ErgoErrorResponse{message: "Offer not signed"};
         enforce request.dueDiligenceFee > 0
@@ -61,9 +63,23 @@ contract DueDiligence over DueDiligenceContract state
           effectiveDate: contract.effectiveDate,
           sellerSignature: contract.sellerSignature,
           sellerSignatureDate: contract.sellerSignatureDate,
-         stateID: "2",
-         status: "SIGNED"
         };
-    return Response{}
+        set state DueDiligenceStatus {
+           stateID: "2",
+           status: "SIGNED"
+        };
+      return {}
    }
+
+   clause dueDiligenceExpired (request: PeriodExpired) : Response {
+      if contract.dueDilignceDate > now then
+         return "Due Diligence period expired"
+      else 
+         return "Due Diligence period not expired"
+   }
+
+   // clause terminateInDueDiligence {
+
+   // }
+
   }
