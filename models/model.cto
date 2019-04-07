@@ -1,4 +1,4 @@
-namespace org.project.dueDiligence
+namespace org.trustblocks.dueDiligence
 
 import org.accordproject.cicero.contract.* from https://models.accordproject.org/cicero/contract.cto
 import org.accordproject.cicero.runtime.* from https://models.accordproject.org/cicero/runtime.cto
@@ -18,16 +18,16 @@ asset DueDiligenceContract extends AccordContract {
   o DateTime dueDiligenceDate
 }
 
- /** The Status of the Contract 
-  *
-  */
+/** The Status of the Contract 
+ *
+ */
 
-  enum DueDiligenceStatus {
-    o UNISIGNED
-    o SIGNED 
-    o POST_DUE_DILIGENCE
-    o CANCELLED 
-  }
+enum DueDiligenceStatus {
+  o UNISIGNED
+  o SIGNED 
+  o POST_DUE_DILIGENCE
+  o CANCELLED 
+}
 
   /** Transactions
    */
@@ -43,3 +43,22 @@ transaction DDPayment extends Request {
   o PaymentObligation dueDiligenceFee
 }
 
+transaction SubmittedOffer extends Response {
+  o DateTime dueDiligenceDate
+  o Double dueDiligenceFee
+  o String buyerSignature
+  o DateTime buyerSignatureDate
+}
+
+transaction AcceptedOffer extends Response {
+  o DateTime effectiveDate
+  o String sellerSignature
+  o DateTime sellerSignatureDate
+}
+
+transaction PeriodExpired extends Request {
+}
+
+transaction PeriodExpiredResponse extends Response {
+  o String reason
+}

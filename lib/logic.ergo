@@ -15,67 +15,61 @@
 namespace org.trustblocks.dueDiligence
 
 import org.accordproject.cicero.runtime.*
+import org.accordproject.time.*
+
 import org.accordproject.signature.ContractSigned
 import org.accordproject.payment.PaymentReceived
 
-
 contract DueDiligence over DueDiligenceContract {
-
     // Set the Initial State
-
     clause init(request: Request) : Response {
              set state DueDiligenceStatus {
                 stateID: "1",
                 status: "UNSIGNED"
               };
-    return response{}
+    return Response{}
     }
 
     // Buyer adds dueDiligenceDate and dueDiligenceFee then signs state doesn't change
 
-    clause buyerSignature(request: ContractSigned) : Response emits SubmittedOffer {
+    clause buyerSignature(request: ContractSigned) : SubmittedOffer {
 
-    return Response{
-
-      SubmittedOffer: {
-            contract: contract,
-            dueDiligenceDate: contract.dueDiligenceDate,
-            dueDiligenceFee: contract.dueDiligenceFee,
-            buyerSignature: contract.buyerSignature,
-            buyerSignatureDate: contract.buyerSignatureDate
-        }
+      return SubmittedOffer{
+        contract: contract,
+        dueDiligenceDate: contract.dueDiligenceDate,
+        dueDiligenceFee: contract.dueDiligenceFee,
+      buyerSignature: contract.buyerSignature,
+        buyerSignatureDate: contract.buyerSignatureDate
+      }
     }
-  }
 
   // Buyer requests seller to sign seller's response sets effectiveDate and moves state
 
-      clause sellerSignature(request: ContractSigned) : Response emits AcceptedOffer {
+    clause sellerSignature(request: ContractSigned) : AcceptedOffer {
         
-        enforce request.buyerSignature = true
-           else throw ErgoErrorResponse{message: "Offer not signed"};
-        enforce request.dueDiligenceFee > 0
-           else throw ErgoErrorResponse{message: "Due Diligence fee must be greater than zero"};
-        enforce request.dueDilignceDate > today
-           else throw ErgoErrorResponse{message: "Invalid Date"};
-      
-        emit AcceptedOffer {
-          contract: contract,
-          effectiveDate: contract.effectiveDate,
-          sellerSignature: contract.sellerSignature,
-          sellerSignatureDate: contract.sellerSignatureDate,
-        };
-        set state DueDiligenceStatus {
-           stateID: "2",
-           status: "SIGNED"
-        };
-      return {}
-   }
+      enforce request.buyerSignature = true
+      else throw ErgoErrorResponse{message: "Offer not signed"};
+      enforce request.dueDiligenceFee > 0
+      else throw ErgoErrorResponse{message: "Due Diligence fee must be greater than zero"};
+      enforce request.dueDilignceDate > today
+      else throw ErgoErrorResponse{message: "Invalid Date"};
 
-   clause dueDiligenceExpired (request: PeriodExpired) : Response {
+      set state DueDiligenceStatus {
+        stateID: "2",
+        status: "SIGNED"
+      };
+      return AcceptedOffer {
+        effectiveDate: contract.effectiveDate,
+        sellerSignature: contract.sellerSignature,
+        sellerSignatureDate: contract.sellerSignatureDate,
+      }
+    }
+
+   clause dueDiligenceExpired (request: PeriodExpired) : PeriodExpiredResponse {
       if contract.dueDilignceDate > now then
-         return "Due Diligence period expired"
+        return PeriodExpiredResponse{ reason: "Due Diligence period expired" }
       else 
-         return "Due Diligence period not expired"
+        return PeriodExpiredResponse{ reason: "Due Diligence period not expired" }
    }
 
    // clause terminateInDueDiligence {
